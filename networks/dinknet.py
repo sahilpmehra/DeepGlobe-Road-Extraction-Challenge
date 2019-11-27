@@ -151,7 +151,7 @@ class DinkNet34(nn.Module):
         self.encoder1 = resnet.layer1
         self.encoder2 = resnet.layer2
         self.encoder3 = resnet.layer3
-        self.encoder4 = Sequential(
+        self.encoder4 = nn.Sequential(
                 resnet.layer4,
                 NLBlockND(in_channels=3, mode='concatenate', dimension=2)
             )

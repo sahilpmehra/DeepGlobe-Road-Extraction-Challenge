@@ -6,6 +6,7 @@ import torch.nn as nn
 from torch.autograd import Variable
 from torchvision import models
 import torch.nn.functional as F
+from non_local import NLBlockND
 
 from functools import partial
 
@@ -150,7 +151,10 @@ class DinkNet34(nn.Module):
         self.encoder1 = resnet.layer1
         self.encoder2 = resnet.layer2
         self.encoder3 = resnet.layer3
-        self.encoder4 = resnet.layer4
+        self.encoder4 = Sequential(
+                resnet.layer4,
+                NLBlockND(in_channels=3, mode='concatenate', dimension=2)
+            )
         
         self.dblock = Dblock(512)
 

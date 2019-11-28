@@ -64,12 +64,21 @@ class MyFrame():
         loss.backward()
         self.optimizer.step()
         return loss.data
-        
+    
     def save(self, path):
-        torch.save(self.net.state_dict(), path)
+        torch.save(self.net.state_dict(), path)    
+	
+    def save(self, path, epoch,losss):
+        torch.save({
+		'epoch' : epoch,
+		'model_state_dict' : self.net.state_dict(),
+		'optimizer_state_dict' : self.optimizer.state_dict(),
+		'loss' : losss}, path)
         
     def load(self, path):
-        self.net.load_state_dict(torch.load(path))
+	    checkpoint = torch.load(path)
+	    self.net.load_state_dict(checkpoint['model_state_dict'])
+	    self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     
     def update_lr(self, new_lr, mylog, factor=False):
         if factor:
@@ -77,6 +86,6 @@ class MyFrame():
         for param_group in self.optimizer.param_groups:
             param_group['lr'] = new_lr
 
-        print >> mylog, 'update learning rate: %f -> %f' % (self.old_lr, new_lr)
-        print ('update learning rate: %f -> %f' % (self.old_lr, new_lr))
+        print('update learning rate: %f -> %f' % (self.old_lr, new_lr), file = mylog)
+        print('update learning rate: %f -> %f' % (self.old_lr, new_lr))
         self.old_lr = new_lr

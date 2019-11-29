@@ -21,8 +21,8 @@ from data import ImageFolder
 SHAPE = (1024,1024)
 ROOT = '/content/DeepGlobe-Road-Extraction-Challenge/dataset/train/'
 imagelist = filter(lambda x: x.find('sat')!=-1, os.listdir(ROOT))
-imagelist = imagelist[:500]
 trainlist = [x[:-8] for x in imagelist] #    map(lambda x: x[:-8], imagelist)
+trainlist = trainlist[:500]
 NAME = 'log01_dink34'
 BATCHSIZE_PER_CARD = 4
 solver = MyFrame(DinkNet34, dice_bce_loss, 2e-4)

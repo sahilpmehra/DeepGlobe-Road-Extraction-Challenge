@@ -9,6 +9,48 @@ import cv2
 import numpy as np
 import os
 
+from scimage import io, transform
+
+def reScale(image, size):
+  h, w = image.shape[:2]
+  if isinstance(size, int):
+    if h>w:
+      new_h, new_w = size*h/w, size
+    else:
+      new_h, new_w = size, size*w/h
+  
+  new_h, new_w = int(new_h), int(new_w)
+  
+  img = transform.resize(image, (new_h, new_w))
+  
+  return image
+  
+
+  
+# def __call__(self, sample):
+#         image, landmarks = sample['image'], sample['landmarks']
+
+#         h, w = image.shape[:2]
+#         if isinstance(self.output_size, int):
+#             if h > w:
+#                 new_h, new_w = self.output_size * h / w, self.output_size
+#             else:
+#                 new_h, new_w = self.output_size, self.output_size * w / h
+#         else:
+#             new_h, new_w = self.output_size
+
+#         new_h, new_w = int(new_h), int(new_w)
+
+#         img = transform.resize(image, (new_h, new_w))
+
+#         # h and w are swapped for landmarks because for images,
+#         # x and y axes are axis 1 and 0 respectively
+#         landmarks = landmarks * [new_w / w, new_h / h]
+
+#         return {'image': img, 'landmarks': landmarks}
+
+
+
 def randomHueSaturationValue(image, hue_shift_limit=(-180, 180),
                              sat_shift_limit=(-255, 255),
                              val_shift_limit=(-255, 255), u=0.5):
@@ -112,6 +154,8 @@ def default_loader(id, root):
     mask[mask>=0.5] = 1
     mask[mask<=0.5] = 0
     #mask = abs(mask-1)
+    img = reScale(img, 256)
+    mask = reScale(mask, 256)
     return img, mask
 
 class ImageFolder(data.Dataset):

@@ -23,6 +23,11 @@ ROOT = '/content/DeepGlobe-Road-Extraction-Challenge/dataset/train/'
 imagelist = filter(lambda x: x.find('sat')!=-1, os.listdir(ROOT))
 trainlist = [x[:-8] for x in imagelist] #    map(lambda x: x[:-8], imagelist)
 trainlist = trainlist[:500]
+traindata = np.array(trainlist)
+res = np.zeros(trainlist.shape())
+for i in range(500):
+	res[i] = cv2.resize(traindata[i], dsize=(54, 140), interpolation=cv2.INTER_CUBIC)
+	
 NAME = 'log01_dink34'
 BATCHSIZE_PER_CARD = 4
 solver = MyFrame(DinkNet34, dice_bce_loss, 2e-4)

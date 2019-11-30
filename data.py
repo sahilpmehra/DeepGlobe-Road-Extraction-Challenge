@@ -116,7 +116,7 @@ def default_loader(id, root):
 
 class ImageFolder(data.Dataset):
 
-    def __init__(self, trainlist, root):
+    def __init__(self, trainlist, root, transform = None):
         self.ids = trainlist
         self.loader = default_loader
         self.root = root

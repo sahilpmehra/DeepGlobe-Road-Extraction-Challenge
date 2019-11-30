@@ -24,8 +24,10 @@ imagelist = filter(lambda x: x.find('sat')!=-1, os.listdir(ROOT))
 trainlist = [x[:-8] for x in imagelist] #    map(lambda x: x[:-8], imagelist)
 trainlist = trainlist[:500]
 traindata = np.array(trainlist)
+traindata.shape
 res = np.zeros(traindata.shape)
 for i in range(500):
+	traindata[i] = np.array(traindata[i])
 	res[i] = cv2.resize(traindata[i], dsize=(54, 140), interpolation=cv2.INTER_CUBIC)
 	
 trainlist = res

@@ -147,6 +147,8 @@ def default_loader(id, root):
     img, mask = randomHorizontalFlip(img, mask)
     img, mask = randomVerticleFlip(img, mask)
     img, mask = randomRotate90(img, mask)
+    img = transform.resize(img, (3, 256, 256))
+    mask = transform.resize(mask, (1, 256, 256))
     
     mask = np.expand_dims(mask, axis=2)
     img = np.array(img, np.float32).transpose(2,0,1)/255.0 * 3.2 - 1.6
@@ -154,8 +156,7 @@ def default_loader(id, root):
     mask[mask>=0.5] = 1
     mask[mask<=0.5] = 0
     #mask = abs(mask-1)
-#     img = reScale(img, 256)
-#     mask = reScale(mask, 256)
+
     return img, mask
 
 class ImageFolder(data.Dataset):

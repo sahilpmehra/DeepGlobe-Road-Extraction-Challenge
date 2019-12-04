@@ -9,7 +9,7 @@ import cv2
 import numpy as np
 import os
 
-from scimage import io, transform
+from skimage import io, transform
 
 def reScale(image, size):
   h, w = image.shape[:2]

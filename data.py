@@ -154,8 +154,8 @@ def default_loader(id, root):
     mask[mask>=0.5] = 1
     mask[mask<=0.5] = 0
     #mask = abs(mask-1)
-    img = reScale(img, 256)
-    mask = reScale(mask, 256)
+#     img = reScale(img, 256)
+#     mask = reScale(mask, 256)
     return img, mask
 
 class ImageFolder(data.Dataset):

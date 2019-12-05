@@ -11,8 +11,8 @@ import os
 
 from skimage import io, transform
 
-def reScale(image, size):
-  h, w = image.shape[:2]
+def reScale(image, mask, size):
+  h, w = image.shape[1:]
   if isinstance(size, int):
     if h>w:
       new_h, new_w = size*h/w, size
@@ -21,9 +21,10 @@ def reScale(image, size):
   
   new_h, new_w = int(new_h), int(new_w)
   
-  image = transform.resize(image, (new_h, new_w))
+  image = transform.resize(image, (3, new_h, new_w))
+  mask = transform.resize(mask, (1, new_h, new_w))
   
-  return image
+  return image, mask
   
 
   
@@ -147,8 +148,8 @@ def default_loader(id, root):
     img, mask = randomHorizontalFlip(img, mask)
     img, mask = randomVerticleFlip(img, mask)
     img, mask = randomRotate90(img, mask)
-#     img = transform.resize(img, (3, 256, 256))
-#     mask = transform.resize(mask, (1, 256, 256))
+    img, mask = reScale(img, mask, 256)
+    
     
     mask = np.expand_dims(mask, axis=2)
     img = np.array(img, np.float32).transpose(2,0,1)/255.0 * 3.2 - 1.6

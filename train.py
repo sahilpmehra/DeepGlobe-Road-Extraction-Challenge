@@ -18,7 +18,7 @@ from framework import MyFrame
 from loss import dice_bce_loss
 from data import ImageFolder
 
-SHAPE = (1024,1024)
+SHAPE = (512, 512)
 ROOT = '/content/DeepGlobe-Road-Extraction-Challenge/dataset/train/'
 imagelist = filter(lambda x: x.find('sat')!=-1, os.listdir(ROOT))
 trainlist = [x[:-8] for x in imagelist] #    map(lambda x: x[:-8], imagelist)

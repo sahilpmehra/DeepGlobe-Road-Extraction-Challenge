@@ -18,7 +18,7 @@ from framework import MyFrame
 from loss import dice_bce_loss
 from data import ImageFolder
 
-SHAPE = (1024,1024)
+SHAPE = (512, 512)
 ROOT = '/content/DeepGlobe-Road-Extraction-Challenge/dataset/train/'
 imagelist = filter(lambda x: x.find('sat')!=-1, os.listdir(ROOT))
 trainlist = [x[:-8] for x in imagelist] #    map(lambda x: x[:-8], imagelist)
@@ -31,6 +31,31 @@ solver = MyFrame(DinkNet34, dice_bce_loss, 2e-4)
 batchsize = torch.cuda.device_count() * BATCHSIZE_PER_CARD
 
 dataset = ImageFolder(trainlist, ROOT)
+
+def reScale(image, mask, size):
+  h, w = image.shape[1:]
+  if isinstance(size, int):
+    if h>w:
+      new_h, new_w = size*h/w, size
+    else:
+      new_h, new_w = size, size*w/h
+  
+  new_h, new_w = int(new_h), int(new_w)
+  
+  image = transform.resize(image, (3, new_h, new_w))
+  image = torch.Tensor(image)
+  mask = transform.resize(mask, (1, new_h, new_w))
+  mask = torch.Tensor(mask)
+  
+  return image, mask
+
+dat = list(dataset)
+
+for i in range(len(dataset)):
+  dat[i] = reScale(dataset[i][0], dataset[i][1], 512)
+
+dataset = tuple(dat)
+
 data_loader = torch.utils.data.DataLoader(
     dataset,
     batch_size=batchsize,

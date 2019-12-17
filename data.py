@@ -148,9 +148,7 @@ def default_loader(id, root):
     img, mask = randomHorizontalFlip(img, mask)
     img, mask = randomVerticleFlip(img, mask)
     img, mask = randomRotate90(img, mask)
-    
-    img, mask = reScale(img, mask, 256)
-    
+        
     
     mask = np.expand_dims(mask, axis=2)
     img = np.array(img, np.float32).transpose(2,0,1)/255.0 * 3.2 - 1.6

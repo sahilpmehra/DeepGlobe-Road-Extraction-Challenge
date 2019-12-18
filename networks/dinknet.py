@@ -148,13 +148,13 @@ class DinkNet34(nn.Module):
         self.firstbn = resnet.bn1
         self.firstrelu = resnet.relu
         self.firstmaxpool = resnet.maxpool
-        self.encoder1 = resnet.layer1
+#         self.encoder1 = resnet.layer1
+        self.encoder1 = nn.Sequential(
+                        resnet.layer1,
+                        NLBlockND(in_channels=64, mode='concatenate', dimension=2)
+                    )
         self.encoder2 = resnet.layer2
-#         self.encoder3 = resnet.layer3
-        self.encoder3 = nn.Sequential(
-                resnet.layer3,
-                NLBlockND(in_channels=256, mode='concatenate', dimension=2)
-            )
+        self.encoder3 = resnet.layer3
         self.encoder4 = resnet.layer4
         
         
